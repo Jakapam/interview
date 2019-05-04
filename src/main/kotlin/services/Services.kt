@@ -4,7 +4,7 @@ class MissingServiceException(serviceName: String) : Exception("Cannot find $ser
 
 
 abstract class Service{
-
+    // Heavily reliant on list to keep code cleaner
     abstract val routes: List<String>
 
     abstract fun getUserRoutes(id: Int):List<String>
@@ -41,8 +41,8 @@ class Komoot:Service(){
 }
 
 class RouteAggregates(val services: List<Service> = listOf(Strava(), Rwgps(), Komoot())){
-
-    val serviceMap = services.associate { it -> it::class.simpleName?.toLowerCase() to it }
+    // this allows us to pass in an arbitrary number of services
+    private val serviceMap = services.associate { it -> it::class.simpleName?.toLowerCase() to it }
 
     fun getAllRoutes():List<String>{
         return services.map{it.routes}.flatten()
@@ -58,6 +58,8 @@ class RouteAggregates(val services: List<Service> = listOf(Strava(), Rwgps(), Ko
 
     fun getUserRoutesByService(id: Int, services: List<String>):List<String>{
         return services.map{
+            // legitimately not sure if this was best/a good way to handle this
+            // But I would rather not let invalid values pass silently in this case
             try {
                 serviceMap[it.toLowerCase()]!!.getUserRoutes(id)
             }catch (npe: NullPointerException){

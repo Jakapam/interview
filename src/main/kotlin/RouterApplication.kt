@@ -1,6 +1,8 @@
 import services.RouteAggregates
 
 fun main(args: Array<String>) {
+
+    // Printing out To match example output
     val routerAggregates = RouteAggregates()
     val serviceList = listOf("Komoot", "RWGPS")
 
