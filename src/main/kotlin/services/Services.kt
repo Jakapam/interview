@@ -1,0 +1,72 @@
+package services
+
+class MissingServiceException(serviceName: String) : Exception("Cannot find $serviceName in list of services!")
+
+
+abstract class Service{
+
+    abstract val routes: List<String>
+
+    abstract fun getUserRoutes(id: Int):List<String>
+
+}
+
+class Strava:Service(){
+
+    override val routes: List<String> = listOf("SRT", "CVT", "Perkiomen")
+
+    override fun getUserRoutes(id: Int): List<String> {
+        return routes.map { "$id$it" }
+    }
+
+}
+
+class Rwgps:Service(){
+
+    override val routes: List<String> = listOf("CVT", "Perkiomen", "Welsh Mountain")
+
+    override fun getUserRoutes(id: Int): List<String> {
+        return routes.map { "$it$id" }
+    }
+
+}
+
+class Komoot:Service(){
+    override val routes: List<String> = listOf("SRT", "Welsh Mountain", "Oaks to Philly")
+
+    override fun getUserRoutes(id: Int): List<String> {
+        return routes.map { "$id$it$id" }
+    }
+
+}
+
+class RouteAggregates(val services: List<Service> = listOf(Strava(), Rwgps(), Komoot())){
+
+    val serviceMap = services.associate { it -> it::class.simpleName?.toLowerCase() to it }
+
+    fun getAllRoutes():List<String>{
+        return services.map{it.routes}.flatten()
+    }
+
+    fun getUniqueRoutes():List<String>{
+        return getAllRoutes().distinct()
+    }
+
+    fun getAllUserRoutes(id: Int):List<String>{
+        return services.map{it.getUserRoutes(id)}.flatten()
+    }
+
+    fun getUserRoutesByService(id: Int, services: List<String>):List<String>{
+        return services.map{
+            try {
+                serviceMap[it.toLowerCase()]!!.getUserRoutes(id)
+            }catch (npe: NullPointerException){
+                throw MissingServiceException(it)
+            }
+
+        }.flatten()
+    }
+
+
+
+}
