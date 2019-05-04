@@ -53,4 +53,14 @@ return the user's routes for only the services listed.
 
 ## Building/Running
 
-TODO: please provide instructions to build and run your program(s) along with any require tools an dependencies.
+All following commands require Java 8.
+
+### Building and Running (from a JAR)
+
+Since the target system is unknown, will use a jar to execute as that has the most portability in this case.
+
+From project root:
+
+1. `./gradlew build` to build jar
+
+2. `java -jar build/libs/interview-1.0.0.jar`
