@@ -44,13 +44,10 @@ class RouteAggregates(val services: List<Service> = listOf(Strava(), Rwgps(), Ko
     // this allows us to pass in an arbitrary number of services
     private val serviceMap = services.associate { it -> it::class.simpleName?.toLowerCase() to it }
 
-    fun getAllRoutes():List<String>{
-        return services.map{it.routes}.flatten()
-    }
-
-    fun getUniqueRoutes():List<String>{
-        return getAllRoutes().distinct()
-    }
+    // Realized that since they're fixed
+    // they don't have to be calculated on the fly
+    val allRoutes = services.map{it.routes}.flatten()
+    val uniqueRoutes = allRoutes.distinct()
 
     fun getAllUserRoutes(id: Int):List<String>{
         return services.map{it.getUserRoutes(id)}.flatten()
