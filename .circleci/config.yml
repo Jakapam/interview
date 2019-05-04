@@ -9,8 +9,8 @@ jobs:
 
       - run:
           name: Build
-          command: cat sampleoutput.txt
+          command: ./gradlew build
 
       - run:
           name: Test
-          command: echo "Not implemented" && exit 1
+          command: ./gradlew test
