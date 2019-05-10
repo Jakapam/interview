@@ -1,15 +1,14 @@
 import org.junit.Test
 import services.*
 import kotlin.test.assertEquals
-import java.util.ArrayList
 import kotlin.test.fail
 
 
 class ServiceTests {
 
-    private val stravaService = Strava()
-    private val rwgpsService = Rwgps()
-    private val komootService = Komoot()
+    private val stravaService = Strava
+    private val rwgpsService = Rwgps
+    private val komootService = Komoot
 
     @Test
     fun `Strava service initialized with correct routes`() {
